@@ -97,3 +97,8 @@
     padding: 10px;
     color: gray;
 }
+
+.chat__timestemp{
+    margin-left: 10px;
+    font-size: xx-small;
+}
