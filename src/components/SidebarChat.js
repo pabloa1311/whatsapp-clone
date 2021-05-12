@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./SidebarChat.css";
 import { Avatar } from "@material-ui/core";
 import db from "../firebase";
@@ -10,6 +10,15 @@ function SidebarChat({ addNewChat, id, name }) {
   // useEffect(() => {
   //     setSeed(Math.floor(Math.random()*5000))
   // }, [])
+  const [messages, setMessages] = useState("")
+
+  useEffect(() => {
+    if(id) {
+      db.collection("rooms").doc(id).collection("messages").orderBy("timestamp", "desc").onSnapshot(snapshot => (
+        setMessages(snapshot.docs.map(doc => doc.data()))
+      ))
+    }
+  }, [id])
 
   const createChat = () => {
     const roomName = prompt("Please enter name for a new chat");
@@ -29,7 +38,7 @@ function SidebarChat({ addNewChat, id, name }) {
         <Avatar src={`https://avatars.dicebear.com/api/initials/${name}.svg`} />
         <div className="sidebarChat__info">
           <h2>{name}</h2>
-          <p>Last message...</p>
+          <p>{messages[0]?.message}</p>
         </div>
       </div>
     </Link>
